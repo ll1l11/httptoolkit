@@ -20,8 +20,8 @@ def dict2cookie(dic):
     cs = ['%s=%s' % (key, dic[key]) for key in dic] 
     return '; '.join(cs)
 
-#url参数中根据key获取value
 def get_url_value(params, key):
+    """url参数中根据key获取value"""
     if "?" in params:
         begin = params.find('?')
         params = params[begin:]
