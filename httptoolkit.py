@@ -134,9 +134,9 @@ class HttpToolkit:
             from cStringIO import StringIO
             from gzip import GzipFile
             data = GzipFile(fileobj=StringIO(data)).read()
-        if charset != None:
+        if charset:
             try:
-                data = unicode(data, charset)
+                data = unicode(data, charset).encode(charset)
             except UnicodeDecodeError:
                 pass
         return data
