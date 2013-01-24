@@ -121,7 +121,9 @@ class HttpToolkit:
         if 301 or 302
         '''
         if response.status == 301 or response.status == 302:
-            location = response.getheader("Location");
+            location = response.getheader("Location")
+            if not location.startswith(r"http://"):
+                location = "%s://%s%s" % (scheme, host, location)
             return self.__request(method='GET', url=location, params=params, cookie=self.cookie, referer=url)
         
         content_type = response.getheader("Content-Type")
