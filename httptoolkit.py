@@ -60,15 +60,15 @@ class HttpToolkit:
         HttpToolkit.ip = ip
         HttpToolkit.port = port
 
-    def get(self, url=None, data=None, cookie=None, referer=None):
+    def get(self, url=None, data=None, cookie=None, referer=None, timeout=20):
         params = self.__data2params(data)
         if '?' in url and params:
             url = '%s&%s' % (url, params)
         elif params:
             url = '%s?%s' % (url, params)
-        return self.__request('GET', url, '', cookie, referer)
-    def post(self, url=None, data={}, cookie=None, referer=None):
-        return self.__request("POST", url, self.__data2params(data), cookie, referer)
+        return self.__request('GET', url, '', cookie, referer, timeout)
+    def post(self, url=None, data={}, cookie=None, referer=None, timeout=30):
+        return self.__request("POST", url, self.__data2params(data), cookie, referer, timeout)
     
     def __data2params(self, data={}):
         try:
@@ -77,7 +77,7 @@ class HttpToolkit:
             params = data
         return params
         
-    def __request(self, method='GET', url=None, params='', cookie=None, referer=None):
+    def __request(self, method='GET', url=None, params='', cookie=None, referer=None, timeout=30):
         if cookie != None:
             self.cookie_dict = cookie2dict(cookie)
             self.headers['Cookie'] = cookie
@@ -88,7 +88,7 @@ class HttpToolkit:
         if rest == '':
             rest = '/'
         if(HttpToolkit.proxy):
-            self.conn = httplib.HTTPConnection('%s:%d' % (HttpToolkit.ip, HttpToolkit.port))
+            self.conn = httplib.HTTPConnection('%s:%d' % (HttpToolkit.ip, HttpToolkit.port), timeout=timeout)
             request_url = '%s://%s%s' % (scheme, host, rest)
         else:
             self.conn = httplib.HTTPConnection(host)
